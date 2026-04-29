@@ -36,9 +36,16 @@ jobs:
         run: npm install
 
       - name: Build the app
+        id: tauri
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           projectPath: ./app
           args: ${{ matrix.args }}
+
+      - name: Upload Tauri bundles
+        uses: actions/upload-artifact@v4
+        with:
+          name: tauri-${{ matrix.target }}
+          path: app/src-tauri/target/${{ matrix.target }}/release/bundle/**/*
